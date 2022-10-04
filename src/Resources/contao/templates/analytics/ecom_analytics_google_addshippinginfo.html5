@@ -1,0 +1,16 @@
+<script>
+    setTimeout(function(){
+        if(window.dataLayer)
+        {
+            dataLayer.push({
+                event: "add_shipping_info",
+                ecommerce: {
+                    currency: "<?= $this->currency ?>",
+                    value: "<?= $this->value ?>",
+                    shipping_tier: "<?= $this->shipping_tier ?>",
+                    items: [<?= $this->items ?>]
+                }
+            });
+        }
+    },1000);
+</script>

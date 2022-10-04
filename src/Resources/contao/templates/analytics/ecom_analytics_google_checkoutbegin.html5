@@ -1,0 +1,13 @@
+<script>
+    setTimeout(function(){
+        if(window.dataLayer)
+        {
+            dataLayer.push({
+                event: "begin_checkout",
+                ecommerce: {
+                    items: [<?= $this->items ?>]
+                }
+            });
+        }
+    },1000);
+</script>

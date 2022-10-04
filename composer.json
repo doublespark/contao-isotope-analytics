@@ -1,0 +1,25 @@
+{
+  "name": "doublespark/contao-isotope-analytics",
+  "type": "ds-contao-bundle",
+  "description": "Add extended analytics support to Isotope",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Jamie Devine",
+      "homepage": "https://www.doublespark.co.uk"
+    }
+  ],
+  "require": {
+    "php": ">=7.4.0",
+    "isotope/isotope-core": "^2.7.0",
+    "facebook/php-business-sdk": "^14.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Doublespark\\IsotopeAnalyticsBundle\\": "src/"
+    }
+  },
+  "extra": {
+    "contao-manager-plugin": "Doublespark\\IsotopeAnalyticsBundle\\ContaoManager\\Plugin"
+  }
+}

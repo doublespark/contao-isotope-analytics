@@ -1,0 +1,17 @@
+<script>
+    setTimeout(function(){
+        if(window.dataLayer)
+        {
+            dataLayer.push({
+                event: "purchase",
+                ecommerce: {
+                    transaction_id: "<?= $this->transaction_id ?>",
+                    value: <?= $this->value ?>,
+                    shipping: <?= $this->shipping ?>,
+                    currency: "<?= $this->currency ?>",
+                    items: [<?= $this->items ?>]
+                }
+            });
+        }
+    },1000);
+</script>

@@ -1,0 +1,15 @@
+<script>
+    setTimeout(function(){
+        if(window.fbq)
+        {
+            fbq('track', 'InitiateCheckout', {
+                'content_category': '<?= $this->content_category; ?>',
+                'content_ids': <?= $this->content_ids; ?>,
+                'num_items': <?= $this->num_items; ?>,
+                'contents': <?= $this->contents; ?>,
+                'currency': '<?= $this->currency; ?>',
+                'value': <?= $this->value; ?>
+            },{eventID: '<?= $this->event_id; ?>'});
+        }
+    },1000);
+</script>

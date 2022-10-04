@@ -1,0 +1,15 @@
+<script>
+    setTimeout(function(){
+        if(window.fbq)
+        {
+            fbq('track', 'AddToCart', {
+                'content_type': '<?= $this->content_type; ?>',
+                'content_ids': <?= $this->content_ids; ?>,
+                'content_name': '<?= $this->content_name; ?>',
+                'contents': <?= $this->contents; ?>,
+                'currency': '<?= $this->currency; ?>',
+                'value': <?= $this->value; ?>
+            },{eventID: '<?= $this->event_id; ?>'});
+        }
+    },1000);
+</script>

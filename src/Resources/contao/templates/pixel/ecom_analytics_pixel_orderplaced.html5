@@ -1,0 +1,16 @@
+<script>
+    setTimeout(function(){
+        if(window.fbq)
+        {
+            fbq('track', 'Purchase', {
+                'content_type': '<?= $this->content_type; ?>',
+                'content_ids': <?= $this->content_ids; ?>,
+                'content_name': '<?= $this->content_name; ?>',
+                'num_items': <?= $this->num_items; ?>,
+                'contents': <?= $this->contents; ?>,
+                'currency': '<?= $this->currency; ?>',
+                'value': <?= $this->value; ?>
+            },{eventID: '<?= $this->event_id; ?>'});
+        }
+    },1000);
+</script>

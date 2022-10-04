@@ -1,0 +1,8 @@
+services:
+  _defaults:
+    autoconfigure: true
+    autowire: true
+
+  # Autoconfigure event listeners
+  Doublespark\IsotopeAnalyticsBundle\EventListener\:
+    resource: '../../../src/EventListener/*'

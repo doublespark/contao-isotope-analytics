@@ -1,0 +1,3 @@
+services:
+  Doublespark\IsotopeAnalyticsBundle\Helper\ProductLoader:
+    public: true
