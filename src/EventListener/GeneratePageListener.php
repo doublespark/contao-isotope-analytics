@@ -53,6 +53,52 @@ class GeneratePageListener
         {
             $this->orderPlaced();
         }
+
+        $this->sendPixelPageView();
+    }
+
+    /**
+     * Send page view
+     */
+    public function sendPixelPageView()
+    {
+        $eventId = PixelHelper::getEventId('pv');
+
+        PixelEvent::pageView($eventId);
+
+        $pixelEnabled  = Config::get('ds_analytics_enable_pixel');
+        $access_token  = Config::get('ds_analytics_pixel_token');
+        $pixel_id      = Config::get('ds_analytics_pixel_id');
+
+        // Make sure pixel tracking is enabled and that we have the required fields
+        if($pixelEnabled && !empty($access_token) && !empty($pixel_id))
+        {
+            Api::init(null,null,$access_token);
+
+            $url = Environment::get('uri');
+
+            $event = (new Event())
+                ->setEventId($eventId)
+                ->setEventName('PageView')
+                ->setEventTime(time())
+                ->setEventSourceUrl($url)
+                ->setUserData(PixelHelper::getUserData())
+                ->setActionSource(ActionSource::WEBSITE);
+
+            $arrEvents = [$event];
+
+            $request = (new EventRequest($pixel_id))->setEvents($arrEvents);
+
+            try {
+
+                $response = $request->execute();
+
+            } catch(\Exception $e) {
+
+                System::getContainer()->get('monolog.logger.contao')->log(LogLevel::ERROR, "Failed to send Conversion API 'PageView' event: ". $e->getMessage(), array('contao' => new ContaoContext('GeneratePageListener::orderPlaced', TL_ERROR)));
+
+            }
+        }
     }
 
     /**

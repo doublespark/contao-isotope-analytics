@@ -1,0 +1,8 @@
+<script>
+    setTimeout(function(){
+        if(window.fbq)
+        {
+            fbq('track', 'PageView', {}, {eventID: '<?= $this->event_id; ?>'});
+        }
+    },500);
+</script>

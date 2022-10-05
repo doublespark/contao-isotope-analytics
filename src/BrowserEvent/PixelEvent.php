@@ -11,6 +11,21 @@ use Isotope\Model\ProductCollection\Order;
 class PixelEvent {
 
     /**
+     * Page view
+     * @param string $eventId
+     */
+    public static function pageView(string $eventId)
+    {
+        $objEvent = new FrontendTemplate('ecom_analytics_pixel_pageview');
+
+        $objEvent->setData([
+            'event_id' => $eventId
+        ]);
+
+        BrowserEvent::add('ecom_analytics_pixel_pageview',$objEvent);
+    }
+
+    /**
      * Fire an add to cart event
      * @param string $eventId
      * @param IsotopeProduct $objProduct
