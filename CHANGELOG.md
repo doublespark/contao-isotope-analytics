@@ -1,6 +1,10 @@
 Doublespark Isotope Analytics Changelog
 ---------------------------------------
 
+Version 1.0.2 (2022-10-05)
+--------------------------
+- Add support for debugging Conversion API events with test code
+
 Version 1.0.1 (2022-10-05)
 --------------------------
 - Add PageView event
