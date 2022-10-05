@@ -89,6 +89,16 @@ class GeneratePageListener
 
             $request = (new EventRequest($pixel_id))->setEvents($arrEvents);
 
+            if(Config::get('ds_analytics_pixel_debug'))
+            {
+                $code = Config::get('ds_analytics_pixel_testcode');
+
+                if(!empty($code))
+                {
+                    $request->setTestEventCode($code);
+                }
+            }
+
             try {
 
                 $response = $request->execute();
@@ -179,6 +189,16 @@ class GeneratePageListener
                     $arrEvents = [$event];
 
                     $request = (new EventRequest($pixel_id))->setEvents($arrEvents);
+
+                    if(Config::get('ds_analytics_pixel_debug'))
+                    {
+                        $code = Config::get('ds_analytics_pixel_testcode');
+
+                        if(!empty($code))
+                        {
+                            $request->setTestEventCode($code);
+                        }
+                    }
 
                     try {
 
@@ -275,6 +295,16 @@ class GeneratePageListener
                     $arrEvents = [$event];
 
                     $request = (new EventRequest($pixel_id))->setEvents($arrEvents);
+
+                    if(Config::get('ds_analytics_pixel_debug'))
+                    {
+                        $code = Config::get('ds_analytics_pixel_testcode');
+
+                        if(!empty($code))
+                        {
+                            $request->setTestEventCode($code);
+                        }
+                    }
 
                     try {
 

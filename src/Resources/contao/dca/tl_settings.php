@@ -2,7 +2,7 @@
 
 use Contao\CoreBundle\DataContainer\PaletteManipulator;
 
-$GLOBALS['TL_DCA']['tl_settings']['subpalettes']['ds_analytics_enable_pixel']  = 'ds_analytics_pixel_id,ds_analytics_pixel_token';
+$GLOBALS['TL_DCA']['tl_settings']['subpalettes']['ds_analytics_enable_pixel']  = 'ds_analytics_pixel_id,ds_analytics_pixel_token,ds_analytics_pixel_debug,ds_analytics_pixel_testcode';
 $GLOBALS['TL_DCA']['tl_settings']['palettes']['__selector__'][] = 'ds_analytics_enable_pixel';
 
 PaletteManipulator::create()
@@ -37,6 +37,18 @@ $GLOBALS['TL_DCA']['tl_settings']['fields']['ds_analytics_pixel_token'] = [
     'exclude'   => true,
     'inputType' => 'text',
     'eval'      => ['mandatory'=>true]
+];
+
+$GLOBALS['TL_DCA']['tl_settings']['fields']['ds_analytics_pixel_debug'] = [
+    'exclude'   => true,
+    'inputType' => 'checkbox',
+    'eval'      => ['tl_class'=> 'clr']
+];
+
+$GLOBALS['TL_DCA']['tl_settings']['fields']['ds_analytics_pixel_testcode'] = [
+    'exclude'   => true,
+    'inputType' => 'text',
+    'eval'      => ['mandatory'=>false]
 ];
 
 $GLOBALS['TL_DCA']['tl_settings']['fields']['ds_analytics_complete_page'] = array
