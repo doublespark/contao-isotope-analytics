@@ -133,7 +133,7 @@ class GeneratePageListener
             {
                 $eventId = PixelHelper::getEventId('ic');
 
-                PixelEvent::initiateCheckout();
+                PixelEvent::initiateCheckout($eventId);
 
                 $access_token  = Config::get('ds_analytics_pixel_token');
                 $pixel_id      = Config::get('ds_analytics_pixel_id');
