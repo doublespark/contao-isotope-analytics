@@ -37,6 +37,18 @@ class GeneratePageListener
      */
     public function __invoke(PageModel $pageModel, LayoutModel $layout, PageRegular $pageRegular): void
     {
+        // Only track FE pages
+        if(TL_MODE !== 'FE')
+        {
+            return;
+        }
+
+        // Do not track 404s
+        if($pageModel->type === 'error_404')
+        {
+            return;
+        }
+        
         /**
          * Checkout
          */
