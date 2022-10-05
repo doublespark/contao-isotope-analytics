@@ -60,7 +60,7 @@ class AddProductToCollectionListener
 
                 $url = Environment::get('uri');
 
-                $eventId = PixelHelper::getEventId();
+                $eventId = PixelHelper::getEventId('atc');
 
                 $event = (new Event())
                     ->setEventId($eventId)

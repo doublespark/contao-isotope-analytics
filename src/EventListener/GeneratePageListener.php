@@ -75,7 +75,9 @@ class GeneratePageListener
 
             if($pixelEnabled)
             {
-                PixelEvent::initiateCheckout(PixelHelper::getEventId());
+                $eventId = PixelHelper::getEventId('ic');
+
+                PixelEvent::initiateCheckout();
 
                 $access_token  = Config::get('ds_analytics_pixel_token');
                 $pixel_id      = Config::get('ds_analytics_pixel_id');
@@ -118,8 +120,6 @@ class GeneratePageListener
                         ->setValue($objCart->getTotal());
 
                     $url = strtok(Environment::get('uri'), '?');
-
-                    $eventId = PixelHelper::getEventId();
 
                     $event = (new Event())
                         ->setEventId($eventId)
@@ -215,7 +215,7 @@ class GeneratePageListener
 
                     $url = strtok(Environment::get('uri'), '?');
 
-                    $eventId = PixelHelper::getEventId();
+                    $eventId = PixelHelper::getEventId('op');
 
                     $event = (new Event())
                         ->setEventId($eventId)

@@ -10,14 +10,14 @@ class PixelHelper {
      * Get the current event ID, creating one if it hasn't been created yet
      * @return string
      */
-    public static function getEventId(): string
+    public static function getEventId($strKey=''): string
     {
         if(!isset($GLOBALS['DS_ANALYTICS']) || empty($GLOBALS['DS_ANALYTICS']))
         {
             $GLOBALS['DS_ANALYTICS'] = substr(md5(time()), 0, 8);
         }
 
-        return $GLOBALS['DS_ANALYTICS'];
+        return $strKey.$GLOBALS['DS_ANALYTICS'];
     }
 
     /**
