@@ -5,7 +5,6 @@ namespace Doublespark\IsotopeAnalyticsBundle\BrowserEvent;
 use Contao\FrontendTemplate;
 use Isotope\Interfaces\IsotopeProduct;
 use Isotope\Isotope;
-use Isotope\Model\ProductCollection;
 use Isotope\Model\ProductCollection\Order;
 
 class PixelEvent {
