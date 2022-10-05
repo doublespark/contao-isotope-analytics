@@ -1,5 +1,8 @@
 Doublespark Isotope Analytics Changelog
 ---------------------------------------
+Version 1.0.4 (2022-10-05)
+--------------------------
+- Don't track 404s or backend pages
 
 Version 1.0.3 (2022-10-05)
 --------------------------
