@@ -3,9 +3,10 @@
 namespace Doublespark\IsotopeAnalyticsBundle\BrowserEvent;
 
 use Contao\FrontendTemplate;
+use Contao\System;
 use Isotope\Interfaces\IsotopeProduct;
+use Isotope\Interfaces\IsotopeProductCollection;
 use Isotope\Isotope;
-use Isotope\Model\ProductCollection;
 use Isotope\Model\ProductCollection\Order;
 
 class GoogleEvent {
@@ -18,15 +19,16 @@ class GoogleEvent {
         $objEvent = new FrontendTemplate('ecom_analytics_google_viewitem');
 
         $objEvent->setData([
-            'value' => $objProduct->getPrice()->getAmount(),
+            'value'    => $objProduct->getPrice()->getAmount(),
             'currency' => 'GBP',
-            'items' => json_encode([
-                'item_id'   => $objProduct->getSku(),
-                'item_name' => $objProduct->getName(),
-                'price'     => $objProduct->getPrice()->getAmount(),
-                'currency'  => 'GBP'
-            ])
+            'items'    => static::getItemFromProduct($objProduct,1)
         ]);
+
+        if (isset($GLOBALS['DSA_HOOKS']['onAnalyticsViewItem']) && \is_array($GLOBALS['DSA_HOOKS']['onAnalyticsViewItem'])) {
+            foreach ($GLOBALS['DSA_HOOKS']['onAnalyticsViewItem'] as $callback) {
+                System::importStatic($callback[0])->{$callback[1]}($objEvent,$objProduct);
+            }
+        }
 
         BrowserEvent::add('ecom_analytics_google_viewitem',$objEvent);
     }
@@ -34,23 +36,24 @@ class GoogleEvent {
     /**
      * Fire an add to cart event
      * @param IsotopeProduct $objProduct
+     * @param IsotopeProductCollection $objCollection
      * @param int $intQty
      */
-    public static function addToCart(IsotopeProduct $objProduct, int $intQty=1): void
+    public static function addToCart(IsotopeProduct $objProduct, IsotopeProductCollection $objCollection, int $intQty=1): void
     {
         $objEvent = new FrontendTemplate('ecom_analytics_google_addtocart');
 
         $objEvent->setData([
-            'value' => $objProduct->getPrice()->getAmount() * $intQty,
+            'value'    => $objProduct->getPrice()->getAmount() * $intQty,
             'currency' => 'GBP',
-            'items' => json_encode([
-                'item_id'   => $objProduct->getSku(),
-                'item_name' => $objProduct->getName(),
-                'quantity'  => $intQty,
-                'price'     => $objProduct->getPrice()->getAmount(),
-                'currency'  => 'GBP'
-            ])
+            'items'    => static::getItemFromProduct($objProduct,$intQty)
         ]);
+
+        if (isset($GLOBALS['DSA_HOOKS']['onAnalyticsAddToCart']) && \is_array($GLOBALS['DSA_HOOKS']['onAnalyticsAddToCart'])) {
+            foreach ($GLOBALS['DSA_HOOKS']['onAnalyticsAddToCart'] as $callback) {
+                System::importStatic($callback[0])->{$callback[1]}($objEvent,$objProduct,$objCollection,$intQty);
+            }
+        }
 
         BrowserEvent::add('ecom_analytics_google_addtocart',$objEvent);
     }
@@ -71,6 +74,12 @@ class GoogleEvent {
         $objEvent->setData([
             'items' => implode(',',$arrProducts),
         ]);
+
+        if (isset($GLOBALS['DSA_HOOKS']['onAnalyticsCheckoutBegin']) && \is_array($GLOBALS['DSA_HOOKS']['onAnalyticsCheckoutBegin'])) {
+            foreach ($GLOBALS['DSA_HOOKS']['onAnalyticsCheckoutBegin'] as $callback) {
+                System::importStatic($callback[0])->{$callback[1]}($objEvent, $objCart);
+            }
+        }
 
         BrowserEvent::add('ecom_analytics_google_checkoutbegin',$objEvent);
     }
@@ -100,6 +109,12 @@ class GoogleEvent {
                 'items'         => implode(',',$arrProducts),
             ]);
 
+            if (isset($GLOBALS['DSA_HOOKS']['onAnalyticsAddShippingInfo']) && \is_array($GLOBALS['DSA_HOOKS']['onAnalyticsAddShippingInfo'])) {
+                foreach ($GLOBALS['DSA_HOOKS']['onAnalyticsAddShippingInfo'] as $callback) {
+                    System::importStatic($callback[0])->{$callback[1]}($objEvent, $objCart);
+                }
+            }
+
             BrowserEvent::add('ecom_analytics_google_addshippinginfo',$objEvent);
         }
     }
@@ -128,6 +143,12 @@ class GoogleEvent {
                 'value'         => $objPayment->getPrice(),
                 'items'         => implode(',',$arrProducts),
             ]);
+
+            if (isset($GLOBALS['DSA_HOOKS']['onAnalyticsAddPaymentInfo']) && \is_array($GLOBALS['DSA_HOOKS']['onAnalyticsAddPaymentInfo'])) {
+                foreach ($GLOBALS['DSA_HOOKS']['onAnalyticsAddPaymentInfo'] as $callback) {
+                    System::importStatic($callback[0])->{$callback[1]}($objEvent, $objCart);
+                }
+            }
 
             BrowserEvent::add('ecom_analytics_google_addpaymentinfo',$objEvent);
         }
@@ -159,41 +180,56 @@ class GoogleEvent {
             'items'          => implode(',',$arrProducts),
         ]);
 
+        if (isset($GLOBALS['DSA_HOOKS']['onAnalyticsOrderPlaced']) && \is_array($GLOBALS['DSA_HOOKS']['onAnalyticsOrderPlaced'])) {
+            foreach ($GLOBALS['DSA_HOOKS']['onAnalyticsOrderPlaced'] as $callback) {
+                System::importStatic($callback[0])->{$callback[1]}($objEvent, $objOrder);
+            }
+        }
+
         BrowserEvent::add('ecom_analytics_google_orderplaced',$objEvent);
     }
 
     /**
      * Create value of "items" field from a product collection
-     * @param ProductCollection $objCollection
+     * @param IsotopeProductCollection $objCollection
      * @return array
      */
-    protected static function getItemsFromCollection(ProductCollection $objCollection): array
+    protected static function getItemsFromCollection(IsotopeProductCollection $objCollection): array
     {
         $arrProducts = [];
 
         // Get products
         foreach($objCollection->getItems() as $objProductCollectionItem)
         {
-            $product = [
-                'item_id'   => $objProductCollectionItem->sku,
-                'item_name' => $objProductCollectionItem->name,
-                'quantity'  => $objProductCollectionItem->quantity,
-                'price'     => $objProductCollectionItem->price,
-                'currency'  => 'GBP'
-            ];
-
-            // Group products by SKU
-            if(isset($arrProducts[$objProductCollectionItem->sku]))
-            {
-                $arrProducts[$objProductCollectionItem->sku]['quantity']++;
-            }
-            else
-            {
-                $arrProducts[$objProductCollectionItem->sku] = $product;
-            }
+            $arrProducts[] = static::getItemFromProduct($objProductCollectionItem->getProduct(), $objProductCollectionItem->quantity);
         }
 
         // Encode product data as JSON
-        return array_map(function($item){return json_encode($item);},$arrProducts);
+        return $arrProducts;
+    }
+
+    /**
+     * Get item JSON from a product object
+     * @param IsotopeProduct $objProduct
+     * @param int $intQty
+     * @return string
+     */
+    protected static function getItemFromProduct(IsotopeProduct $objProduct, int $intQty=0): string
+    {
+        $itemJson = json_encode([
+            'item_id'   => $objProduct->sku,
+            'item_name' => $objProduct->name,
+            'quantity'  => $intQty,
+            'price'     => $objProduct->getPrice()->getAmount(),
+            'currency'  => 'GBP'
+        ]);
+
+        if (isset($GLOBALS['DSA_HOOKS']['onAnalyticsGetItemFromProduct']) && \is_array($GLOBALS['DSA_HOOKS']['onAnalyticsGetItemFromProduct'])) {
+            foreach ($GLOBALS['DSA_HOOKS']['onAnalyticsGetItemFromProduct'] as $callback) {
+                $itemJson = System::importStatic($callback[0])->{$callback[1]}($objProduct, $intQty, $itemJson);
+            }
+        }
+
+        return $itemJson;
     }
 }

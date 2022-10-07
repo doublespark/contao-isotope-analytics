@@ -28,14 +28,14 @@ class AddProductToCollectionListener
     /**
      * @param IsotopeProduct $objProduct
      * @param int $intQuantity
-     * @param ProductCollection $collection
+     * @param ProductCollection $objCart
      * @param array $arrConfig
      * @return int
      */
-    public function __invoke(IsotopeProduct $objProduct, int $intQuantity, ProductCollection $collection, array $arrConfig): int
+    public function __invoke(IsotopeProduct $objProduct, int $intQuantity, ProductCollection $objCart, array $arrConfig): int
     {
         // See if we are adding to cart
-        if($collection instanceof ProductCollection\Cart)
+        if($objCart instanceof ProductCollection\Cart)
         {
             $googleEnabled = Config::get('ds_analytics_enable_google');
             $pixelEnabled  = Config::get('ds_analytics_enable_pixel');
@@ -98,7 +98,7 @@ class AddProductToCollectionListener
             if($googleEnabled)
             {
                 // Fire browser event
-                GoogleEvent::addToCart($objProduct,$intQuantity);
+                GoogleEvent::addToCart($objProduct,$objCart,$intQuantity);
             }
         }
 
