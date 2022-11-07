@@ -1,14 +1,11 @@
 <script>
     setTimeout(function(){
-        if(window.dataLayer)
+        if(window.gtag)
         {
-            dataLayer.push({
-                event: "view_item",
-                ecommerce: {
-                    currency: <?= $this->currency ?>,
-                    value: <?= $this->value ?>,
-                    items: [<?= $this->items ?>]
-                }
+            gtag("event", "view_item", {
+                currency: "<?= $this->currency ?>",
+                value: <?= $this->value ?>,
+                items: [<?= $this->items ?>]
             });
         }
     },1000);

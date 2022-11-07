@@ -1,12 +1,9 @@
 <script>
     setTimeout(function(){
-        if(window.dataLayer)
+        if(window.gtag)
         {
-            dataLayer.push({
-                event: "begin_checkout",
-                ecommerce: {
-                    items: [<?= $this->items ?>]
-                }
+            gtag("event", "begin_checkout", {
+                items: [<?= $this->items ?>]
             });
         }
     },1000);
