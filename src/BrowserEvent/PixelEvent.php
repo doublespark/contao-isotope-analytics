@@ -42,13 +42,15 @@ class PixelEvent {
             ]
         ];
 
+        $objConfig = Isotope::getConfig();
+
         $objEvent->setData([
             'event_id'     => $eventId,
             'content_type' => 'product',
             'contents'     => json_encode($arrContents),
             'content_ids'  => "['".$objProduct->getSku()."']",
             'content_name' => $objProduct->getName(),
-            'currency'     => 'GBP',
+            'currency'     => $objConfig->currency,
             'value'        => $objProduct->getPrice()->getAmount() * $intQty
         ]);
 
@@ -95,12 +97,14 @@ class PixelEvent {
         // Convert from keyed to indexed array
         $arrContents = array_values($arrContents);
 
+        $objConfig = Isotope::getConfig();
+
         $objEvent->setData([
             'event_id'         => $eventId,
             'contents'         => json_encode($arrContents),
             'content_ids'      => "[".implode(',',$arrContentIds)."]",
             'num_items'        => $itemCount,
-            'currency'         => 'gbp',
+            'currency'         => $objConfig->currency,
             'value'            => $objCart->getTotal()
         ]);
 
@@ -151,7 +155,7 @@ class PixelEvent {
             'content_ids'  => "[".implode(',',$arrContentIds)."]",
             'num_items'    => $itemCount,
             'content_name' => 'Order Placed',
-            'currency'     => 'GBP',
+            'currency'     => $objOrder->currency,
             'value'        => $objOrder->getTotal()
         ]);
 

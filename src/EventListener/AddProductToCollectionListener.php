@@ -16,6 +16,7 @@ use FacebookAds\Object\ServerSide\Event;
 use FacebookAds\Object\ServerSide\CustomData;
 use FacebookAds\Object\ServerSide\EventRequest;
 use Isotope\Interfaces\IsotopeProduct;
+use Isotope\Isotope;
 use Isotope\Model\ProductCollection;
 use Isotope\ServiceAnnotation\IsotopeHook;
 use Psr\Log\LogLevel;
@@ -47,6 +48,8 @@ class AddProductToCollectionListener
             {
                 Api::init(null,null,$access_token);
 
+                $objConfig = Isotope::getConfig();
+
                 $content = (new Content())
                     ->setProductId($objProduct->getSku())
                     ->setQuantity($intQuantity)
@@ -55,7 +58,7 @@ class AddProductToCollectionListener
 
                 $customData = (new CustomData())
                     ->setContents([$content])
-                    ->setCurrency('gbp')
+                    ->setCurrency($objConfig->currency)
                     ->setValue($objProduct->getPrice()->getAmount() * $intQuantity);
 
                 $url = Environment::get('uri');

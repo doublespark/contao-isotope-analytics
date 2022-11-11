@@ -18,9 +18,11 @@ class GoogleEvent {
     {
         $objEvent = new FrontendTemplate('ecom_analytics_google_viewitem');
 
+        $objConfig = Isotope::getConfig();
+
         $objEvent->setData([
             'value'    => $objProduct->getPrice()->getAmount(),
-            'currency' => 'GBP',
+            'currency' => $objConfig->currency,
             'items'    => static::getItemFromProduct($objProduct,1)
         ]);
 
@@ -43,9 +45,11 @@ class GoogleEvent {
     {
         $objEvent = new FrontendTemplate('ecom_analytics_google_addtocart');
 
+        $objConfig = Isotope::getConfig();
+
         $objEvent->setData([
             'value'    => $objProduct->getPrice()->getAmount() * $intQty,
-            'currency' => 'GBP',
+            'currency' => $objConfig->currency,
             'items'    => static::getItemFromProduct($objProduct,$intQty)
         ]);
 
@@ -102,8 +106,10 @@ class GoogleEvent {
             // Ship shipping info
             $objShipping = $objCart->getShippingMethod();
 
+            $objConfig = Isotope::getConfig();
+
             $objEvent->setData([
-                'currency'      => 'GBP',
+                'currency'      => $objConfig->currency,
                 'shipping_tier' => $objShipping->getLabel(),
                 'value'         => $objShipping->getPrice(),
                 'items'         => implode(',',$arrProducts),
@@ -137,8 +143,10 @@ class GoogleEvent {
             // Ship shipping info
             $objPayment = $objCart->getPaymentMethod();
 
+            $objConfig = Isotope::getConfig();
+
             $objEvent->setData([
-                'currency'      => 'GBP',
+                'currency'      => $objConfig->currency,
                 'payment_type'  => $objPayment->getLabel(),
                 'value'         => $objPayment->getPrice(),
                 'items'         => implode(',',$arrProducts),
@@ -176,7 +184,7 @@ class GoogleEvent {
             'transaction_id' => $objOrder->document_number,
             'value'          => $objOrder->total,
             'shipping'       => $shippingPrice,
-            'currency'       => 'GBP',
+            'currency'       => $objOrder->currency,
             'items'          => implode(',',$arrProducts),
         ]);
 
@@ -216,12 +224,14 @@ class GoogleEvent {
      */
     protected static function getItemFromProduct(IsotopeProduct $objProduct, int $intQty=0): string
     {
+        $objConfig = Isotope::getConfig();
+
         $itemJson = json_encode([
             'item_id'   => $objProduct->sku,
             'item_name' => $objProduct->name,
             'quantity'  => $intQty,
             'price'     => $objProduct->getPrice()->getAmount(),
-            'currency'  => 'GBP'
+            'currency'  => $objConfig->currency
         ]);
 
         if (isset($GLOBALS['DSA_HOOKS']['onAnalyticsGetItemFromProduct']) && \is_array($GLOBALS['DSA_HOOKS']['onAnalyticsGetItemFromProduct'])) {

@@ -182,9 +182,11 @@ class GeneratePageListener
                     // Convert from keyed to indexed array
                     $arrContent = array_values($arrContent);
 
+                    $objConfig = Isotope::getConfig();
+
                     $customData = (new CustomData())
                         ->setContents($arrContent)
-                        ->setCurrency('gbp')
+                        ->setCurrency($objConfig->currency)
                         ->setValue($objCart->getTotal());
 
                     $url = strtok(Environment::get('uri'), '?');
@@ -288,7 +290,7 @@ class GeneratePageListener
 
                     $customData = (new CustomData())
                         ->setContents($arrContent)
-                        ->setCurrency('gbp')
+                        ->setCurrency($objOrder->currency)
                         ->setValue($objOrder->getTotal());
 
                     $url = strtok(Environment::get('uri'), '?');
