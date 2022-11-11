@@ -1,5 +1,10 @@
 Doublespark Isotope Analytics Changelog
 ---------------------------------------
+Version 1.0.6 (2022-11-11)
+--------------------------
+- Add support for multiple currencies
+- Use gtag events instead of datalayer
+
 Version 1.0.5 (2022-10-07)
 --------------------------
 - Added hooks for manipulating events
