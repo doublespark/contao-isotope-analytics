@@ -29,9 +29,6 @@ class PixelHelper {
     {
         $userData = new UserData();
 
-        $userData->setClientIpAddress($_SERVER['REMOTE_ADDR']);
-        $userData->setClientUserAgent($_SERVER['HTTP_USER_AGENT']);
-
         $fbp = $_COOKIE['_fbp'] ?? null;
 
         if($fbp)
@@ -45,7 +42,8 @@ class PixelHelper {
         {
             $userData->setFbc($fbc);
         }
-
+        
+        $userData->setClientIpAddress(Environment::get('ip'));
         $userData->setClientUserAgent(Environment::get('httpUserAgent'));
 
         return $userData;
