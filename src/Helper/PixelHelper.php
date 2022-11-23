@@ -2,6 +2,7 @@
 
 namespace Doublespark\IsotopeAnalyticsBundle\Helper;
 
+use Contao\Environment;
 use FacebookAds\Object\ServerSide\UserData;
 
 class PixelHelper {
@@ -44,6 +45,8 @@ class PixelHelper {
         {
             $userData->setFbc($fbc);
         }
+
+        $userData->setClientUserAgent(Environment::get('httpUserAgent'));
 
         return $userData;
     }
