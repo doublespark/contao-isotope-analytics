@@ -1,3 +1,4 @@
 services:
-  Doublespark\IsotopeAnalyticsBundle\Helper\ProductLoader:
+  ds.analytics.user_agent_validator:
+    class: Doublespark\IsotopeAnalyticsBundle\Helper\UserAgentValidator
     public: true

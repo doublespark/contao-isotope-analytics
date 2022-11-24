@@ -14,6 +14,7 @@ use Contao\System;
 use Doublespark\IsotopeAnalyticsBundle\BrowserEvent\GoogleEvent;
 use Doublespark\IsotopeAnalyticsBundle\BrowserEvent\PixelEvent;
 use Doublespark\IsotopeAnalyticsBundle\Helper\PixelHelper;
+use Doublespark\IsotopeAnalyticsBundle\Helper\UserAgentValidator;
 use FacebookAds\Api;
 use FacebookAds\Object\ServerSide\ActionSource;
 use FacebookAds\Object\ServerSide\Content;
@@ -66,7 +67,10 @@ class GeneratePageListener
             $this->orderPlaced();
         }
 
-        $this->sendPixelPageView();
+        if(System::getContainer()->get('ds.analytics.user_agent_validator')->isAllowed(Environment::get('httpUserAgent')))
+        {
+            $this->sendPixelPageView();
+        }
     }
 
     /**
