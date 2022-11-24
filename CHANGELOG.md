@@ -1,5 +1,10 @@
 Doublespark Isotope Analytics Changelog
 ---------------------------------------
+Version 1.0.7 (2022-11-24)
+--------------------------
+- Use Contao Environment class in PixelHelper
+- Block popular bots from sending pixel PageView events
+
 Version 1.0.6 (2022-11-11)
 --------------------------
 - Add support for multiple currencies
