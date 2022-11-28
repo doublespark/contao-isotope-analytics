@@ -1,5 +1,10 @@
 Doublespark Isotope Analytics Changelog
 ---------------------------------------
+
+Version 1.0.8 (2022-11-28)
+--------------------------
+- Fire add_shipping_info once customer lands on payment step
+
 Version 1.0.7 (2022-11-24)
 --------------------------
 - Use Contao Environment class in PixelHelper
