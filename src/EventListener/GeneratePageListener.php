@@ -234,12 +234,21 @@ class GeneratePageListener
             }
         }
 
+        // If we're on the payment step, customer has just set their shipping info
+        if($step === Checkout::STEP_PAYMENT)
+        {
+            if($googleEnabled)
+            {
+                GoogleEvent::addShippingInfo();
+            }
+        }
+
+        // If we're on the review step, customer has set their payment info
         if($step === Checkout::STEP_REVIEW)
         {
             if($googleEnabled)
             {
                 GoogleEvent::addPaymentInfo();
-                GoogleEvent::addShippingInfo();
             }
         }
     }
